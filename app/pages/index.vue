@@ -10,12 +10,12 @@
     </div>
     <template v-if="todos.length">
       <TodoItem
-        v-for="(todo, index) of todos"
-        :key="index"
-        :value="{ ...todo, index }"
+        v-for="todo of todos"
+        :key="todo.id"
+        :value="todo"
       />
     </template>
-    <div v-else class="py-8 text-center	" >Add some in todo</div>
+    <div v-else class="py-8 text-center">Add some in todo</div>
   </div>
 </template>
 
@@ -23,18 +23,21 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  data() {
+  async asyncData({ $axios }) {
+    const res = await $axios.$get('http://localhost:8080/todos')
+    return { todos: res.data || [] }
+  },
+  data(): {
+    newTodoLabel: string
+    todos: Record<'id' | 'title' | 'status', string>[]
+  } {
     return {
-      newTodoLabel: '',
       todos: [],
+      newTodoLabel: '',
     }
   },
   methods: {
     addTodo() {
-      this.todos.push({
-        label: this.newTodoLabel,
-        finished: false,
-      })
       this.newTodoLabel = ''
     },
   },

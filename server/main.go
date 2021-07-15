@@ -13,9 +13,9 @@ import (
 	"gorm.io/gorm"
 )
 type Todo struct {
-	ID          string 
-	Title string 
-	Status      string
+	ID    			string `json:"id"`
+	Title 			string `json:"title"`
+	Status      string `json:"status"`
 }
 
 func getEnv() {

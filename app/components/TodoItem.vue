@@ -1,7 +1,7 @@
 <template>
   <div class="py-2 flex items-center">
-    <input :id="todoKey" type="checkbox" :checked="value.finished" />
-    <label :for="todoKey" class="pl-1">{{ value.label }}</label>
+    <input :id="todoKey" type="checkbox" :checked="value.status === 'completed'" />
+    <label :for="todoKey" class="pl-1">{{ value.title }}</label>
   </div>
 </template>
 
