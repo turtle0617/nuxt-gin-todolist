@@ -8,6 +8,7 @@ import (
 
 	"github.com/joho/godotenv"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -28,6 +29,9 @@ func getEnv() {
 func main() {
 	r := gin.Default()
 	db := openDB()
+
+	corsConfig := CorsConfig()
+	r.Use(cors.New(corsConfig))
 
 	r.GET("/todos", func(c *gin.Context) {
 		var todos []Todo
@@ -69,4 +73,13 @@ func openDB()*gorm.DB{
     panic("failed to connect database")
   }
 	return db
+}
+
+func CorsConfig()  cors.Config{
+	corsConf := cors.DefaultConfig()
+	corsConf.AllowAllOrigins = true
+	corsConf.AllowMethods = []string{"GET", "POST", "DELETE", "OPTIONS", "PUT"}
+	corsConf.AllowHeaders = []string{"Authorization", "Content-Type", "Upgrade", "Origin",
+			"Connection", "Accept-Encoding", "Accept-Language", "Host", "Access-Control-Request-Method", "Access-Control-Request-Headers"}
+	return corsConf
 }
