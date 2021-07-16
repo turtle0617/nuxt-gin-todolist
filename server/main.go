@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 type Todo struct {
-	ID    			string `json:"id"`
+	ID    			uint `gorm:"primaryKey" json:"id"`
 	Title 			string `json:"title"`
 	Status      string `json:"status"`
 }
@@ -34,6 +34,28 @@ func main() {
 		db.Find(&todos)
 		c.JSON(200, gin.H{
 			"data": todos,
+		})
+	})
+
+	r.POST("/todos",func(c *gin.Context){
+		var payload Todo
+		if err := c.ShouldBindJSON(&payload); err != nil {
+			c.JSON(401, gin.H{"error": err.Error()})
+			return
+		}
+		
+		createTodoResult := db.Select("Title").Create(&payload)
+		searchTodoResult := db.First(&payload)
+
+		if createTodoResult.Error != nil {
+			c.JSON(401, gin.H{"error":createTodoResult.Error})
+		}
+		if searchTodoResult.Error != nil {
+			c.JSON(401, gin.H{"error":searchTodoResult.Error})
+		}
+
+		c.JSON(200, gin.H{
+			"data": payload,
 		})
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
