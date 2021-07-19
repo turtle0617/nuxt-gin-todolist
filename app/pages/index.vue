@@ -9,11 +9,7 @@
       <button class="px-2" @click="addTodo">+</button>
     </div>
     <template v-if="todos.length">
-      <TodoItem
-        v-for="todo of todos"
-        :key="todo.id"
-        :value="todo"
-      />
+      <TodoItem v-for="todo of todos" :key="todo.id" :value="todo" />
     </template>
     <div v-else class="py-8 text-center">Add some in todo</div>
   </div>
@@ -23,22 +19,37 @@
 import Vue from 'vue'
 
 export default Vue.extend({
-  async asyncData({ $axios }) {
-    const res = await $axios.$get('http://localhost:8080/todos')
-    return { todos: res.data || [] }
-  },
   data(): {
     newTodoLabel: string
     todos: Record<'id' | 'title' | 'status', string>[]
   } {
     return {
-      todos: [],
+      todos: [
+        {
+          id: 'a',
+          title: 'b',
+          status: 'idle',
+        },
+      ],
       newTodoLabel: '',
     }
   },
+  async fetch() {
+    const res = await this.$axios.$get('http://localhost:8080/todos')
+    this.todos = res.data || []
+  },
   methods: {
-    addTodo() {
-      this.newTodoLabel = ''
+    async addTodo() {
+      try {
+        if (!this.newTodoLabel) return
+        await this.$axios.post('http://localhost:8080/todos', {
+          title: this.newTodoLabel,
+        })
+        this.newTodoLabel = ''
+        this.$fetch()
+      } catch (error) {
+        console.error(error)
+      }
     },
   },
 })
