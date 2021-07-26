@@ -83,6 +83,19 @@ func main() {
 			"data": todo,
 		})
 	})
+
+	r.DELETE("/todos/:id",func(c *gin.Context){
+		var todo Todo
+		id := c.Param("id")
+		if err := db.Delete(&todo,"id = ?",id).Error; err != nil {
+			c.JSON(401, gin.H{"error":err})
+		}else {
+			c.JSON(200, gin.H{
+				"message": "Deleted successfully",
+			})
+		}
+
+	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
