@@ -62,6 +62,27 @@ func main() {
 			"data": payload,
 		})
 	})
+
+	r.PATCH("/todos/:id",func(c *gin.Context){
+		var todo Todo
+		var payload Todo
+		id := c.Param("id")
+		if err := db.Where("id = ?",id).First(&todo).Error; err != nil {
+			c.JSON(401, gin.H{"error":err})
+		}
+
+		if err:= c.ShouldBindJSON(&payload); err!=nil {
+			c.JSON(401, gin.H{"error": err.Error()})
+		}
+
+		if err:=db.Model(&todo).Updates(payload).Error; err!= nil {
+			c.JSON(401, gin.H{"error": err})
+		}
+
+		c.JSON(200, gin.H{
+			"data": todo,
+		})
+	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
