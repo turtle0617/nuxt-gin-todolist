@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/turtle0617/nuxt-todolist/server/config"
-	"github.com/turtle0617/nuxt-todolist/server/model"
+	"github.com/turtle0617/nuxt-gin-todolist/server/config"
+	"github.com/turtle0617/nuxt-gin-todolist/server/model"
 )
 
 func DeleteTodo(c *gin.Context){

@@ -1,4 +1,4 @@
-# nuxt-todolist
+# nuxt-gin-todolist
 
 ## Build Setup
 

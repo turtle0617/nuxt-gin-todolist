@@ -4,8 +4,8 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"github.com/turtle0617/nuxt-todolist/server/config"
-	"github.com/turtle0617/nuxt-todolist/server/controller"
+	"github.com/turtle0617/nuxt-gin-todolist/server/config"
+	"github.com/turtle0617/nuxt-gin-todolist/server/controller"
 )
 
 func main() {
