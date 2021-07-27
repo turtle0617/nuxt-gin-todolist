@@ -8,7 +8,7 @@ import (
 
 func GetTodos(c *gin.Context) {
 	var todos []model.Todo
-	config.GetDB().Find(&todos)
+	config.GetDB().Order("id asc").Find(&todos)
 	c.JSON(200, gin.H{
 		"data": todos,
 	})
