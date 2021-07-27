@@ -13,6 +13,7 @@
         v-for="todo of todos"
         :key="todo.id"
         :value="todo"
+        @update="(payload) => updateTodo(todo.id, payload)"
         @delete="deleteTodo"
       />
     </template>
@@ -22,11 +23,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Todo } from '../types'
 
 export default Vue.extend({
   data(): {
     newTodoLabel: string
-    todos: Record<'id' | 'title' | 'status', string>[]
+    todos: Todo[]
   } {
     return {
       todos: [
@@ -55,6 +57,10 @@ export default Vue.extend({
       } catch (error) {
         console.error(error)
       }
+    },
+    async updateTodo(id: string, payload: Partial<Todo>) {
+      await this.$axios.$patch(`http://localhost:8080/todos/${id}`, payload)
+      this.$fetch()
     },
     async deleteTodo(id: string) {
       await this.$axios.$delete(`http://localhost:8080/todos/${id}`)
