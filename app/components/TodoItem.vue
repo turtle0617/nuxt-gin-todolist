@@ -5,7 +5,8 @@
       type="checkbox"
       :checked="value.status === 'completed'"
     />
-    <label :for="todoKey" class="pl-1">{{ value.title }}</label>
+    <label :for="todoKey" class="pl-1 flex-1">{{ value.title }}</label>
+    <button class="px-2" @click="$emit('delete', value.id)">x</button>
   </div>
 </template>
 

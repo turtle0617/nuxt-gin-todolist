@@ -9,7 +9,12 @@
       <button class="px-2" @click="addTodo">+</button>
     </div>
     <template v-if="todos.length">
-      <TodoItem v-for="todo of todos" :key="todo.id" :value="todo" />
+      <TodoItem
+        v-for="todo of todos"
+        :key="todo.id"
+        :value="todo"
+        @delete="deleteTodo"
+      />
     </template>
     <div v-else class="py-8 text-center">Add some in todo</div>
   </div>
@@ -50,6 +55,10 @@ export default Vue.extend({
       } catch (error) {
         console.error(error)
       }
+    },
+    async deleteTodo(id: string) {
+      await this.$axios.$delete(`http://localhost:8080/todos/${id}`)
+      this.$fetch()
     },
   },
 })
