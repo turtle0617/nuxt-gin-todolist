@@ -11,35 +11,28 @@
 </template>
 
 <script lang="ts">
-import { PropOptions } from 'vue'
+import { Component, Vue, Prop } from 'nuxt-property-decorator'
 import { Todo, TodoStatus } from '../types'
-export default {
-  props: {
-    value: {
-      type: Object,
-      require: true,
-      default: null,
-    } as PropOptions<Todo | null>,
-  },
-  data() {
-    return {
-      TodoStatus,
-    }
-  },
-  computed: {
-    todoKey() {
-      return `todo-${this.value.index}`
-    },
-  },
-  methods: {
-    updateValue(val) {
-      this.$emit('update', { title: val.target.value })
-    },
-    updateStatus(val) {
-      this.$emit('update', {
-        status: val.target.checked ? TodoStatus.COMPLETED : TodoStatus.IDLE,
-      })
-    },
-  },
+
+@Component
+export default class TodoItem extends Vue {
+  @Prop({ type: Object, required: true, default: null })
+  public value!: Todo | null
+
+  public TodoStatus = TodoStatus
+
+  get todoKey() {
+    return `todo-${this.value?.id}`
+  }
+
+  updateValue(val: any) {
+    this.$emit('update', { title: val.target.value })
+  }
+
+  updateStatus(val: any) {
+    this.$emit('update', {
+      status: val.target.checked ? TodoStatus.COMPLETED : TodoStatus.IDLE,
+    })
+  }
 }
 </script>

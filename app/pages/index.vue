@@ -22,50 +22,41 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Component, Vue } from 'nuxt-property-decorator'
+
 import { Todo } from '../types'
 
-export default Vue.extend({
-  data(): {
-    newTodoLabel: string
-    todos: Todo[]
-  } {
-    return {
-      todos: [
-        {
-          id: 'a',
-          title: 'b',
-          status: 'idle',
-        },
-      ],
-      newTodoLabel: '',
-    }
-  },
+@Component
+export default class TodoPage extends Vue {
+  public todos: Todo[] = []
+  public newTodoLabel = ''
+
   async fetch() {
     const res = await this.$axios.$get('http://localhost:8080/todos')
     this.todos = res.data || []
-  },
-  methods: {
-    async addTodo() {
-      try {
-        if (!this.newTodoLabel) return
-        await this.$axios.post('http://localhost:8080/todos', {
-          title: this.newTodoLabel,
-        })
-        this.newTodoLabel = ''
-        this.$fetch()
-      } catch (error) {
-        console.error(error)
-      }
-    },
-    async updateTodo(id: string, payload: Partial<Todo>) {
-      await this.$axios.$patch(`http://localhost:8080/todos/${id}`, payload)
+  }
+
+  async addTodo() {
+    try {
+      if (!this.newTodoLabel) return
+      await this.$axios.post('http://localhost:8080/todos', {
+        title: this.newTodoLabel,
+      })
+      this.newTodoLabel = ''
       this.$fetch()
-    },
-    async deleteTodo(id: string) {
-      await this.$axios.$delete(`http://localhost:8080/todos/${id}`)
-      this.$fetch()
-    },
-  },
-})
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async updateTodo(id: string, payload: Partial<Todo>) {
+    await this.$axios.$patch(`http://localhost:8080/todos/${id}`, payload)
+    this.$fetch()
+  }
+
+  async deleteTodo(id: string) {
+    await this.$axios.$delete(`http://localhost:8080/todos/${id}`)
+    this.$fetch()
+  }
+}
 </script>
